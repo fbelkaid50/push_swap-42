@@ -1,70 +1,71 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbelkaid <fbelkaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/17 15:53:56 by fbelkaid          #+#    #+#             */
-/*   Updated: 2024/05/17 15:56:00 by fbelkaid         ###   ########.fr       */
+/*   Created: 2024/06/02 10:22:09 by fbelkaid          #+#    #+#             */
+/*   Updated: 2024/06/16 15:16:50 by fbelkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push_swap.h"
+#include "tools.h"
 
-void	ft_error_lst(t_list *p, int k)
+void	ft_putnbr_fd(int n, int fd)
 {
-	t_list	*s;
-
-	if (k == 1)
-		write(2, "max or min de int !\n", 20);
-	else if (k == 2)
-		write(2, "duplicate numbers !\n", 20);
-	else
-		write(2, "Error\n", 6);
-	if (!p)
-		exit(5);
-	while (p)
+	if (n > 9)
 	{
-		s = p;
-		p = p->next;
-		free(s);
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(n % 10, fd);
 	}
-	exit(1);
+	else
+	{
+		n = n + '0';
+		write(fd, &n, 1);
+	}
 }
 
-int	ft_strlen(char *s)
+void	ft_putstr_fd(char *s, int fd)
+{
+	write(fd, s, ft_strlen(s));
+}
+
+int	ft_strlen(const char *str)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] != '\0')
+	while (str[i])
 		i++;
 	return (i);
 }
 
-int	ft_atoi(char *str, t_list *p)
+void	ft_putchar_fd(char c, int fd)
 {
-	int		x;
+	write(fd, &c, 1);
+}
+
+int	ft_atoi(char *str)
+{
 	int		i;
+	int		sign;
 	long	nbr;
 
 	i = 0;
+	sign = 1;
 	nbr = 0;
-	x = 1;
 	if (str[i] == '-')
 	{
-		x = -1;
+		sign = -1;
 		i++;
 	}
 	else if (str[i] == '+')
 		i++;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		nbr = (nbr * 10) + (str[i] - 48);
+		nbr = nbr * 10 + (str[i] - '0');
 		i++;
 	}
-	if (nbr * x > 2147483647 || nbr * x < -2147483648)
-		ft_error_lst(p, 1);
-	return (nbr * x);
+	return (nbr * sign);
 }
